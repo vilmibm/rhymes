@@ -1,3 +1,6 @@
+from functools import partial
+import sys
+
 import nltk
 
 # Set up NLTK
@@ -10,6 +13,9 @@ tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
 # For looking up word sounds:
 cmudict = nltk.corpus.cmudict.dict()
 
+# Number of sounds to look at when determining rhymes
+DEFAULT_RHYME_STRENGTH = 3
+
 def get_last_word(sentence):
     """Given a sentence, return its last word, accounting for punctuation."""
     words = sentence.split(' ')
@@ -20,7 +26,7 @@ def get_last_word(sentence):
 
     return last_word.lower()
 
-def get_rhyme_sound(sentence):
+def get_rhyme_sound(strength, sentence):
     """Given a sentence, this function returns a string representing the rhyme
     sound of the last word of the sentence. If it can't figure out the sound,
     it returns None."""
@@ -37,9 +43,15 @@ def get_rhyme_sound(sentence):
 
     # Create the rhyme sound string by combining the last three phonemes of the
     # last word:
-    return ''.join(phonemes[-3:])
+    return ''.join(phonemes[-strength:])
 
 if __name__ == '__main__':
+    args = sys.argv[1:]
+    if len(args) == 1:
+        rhyme_strength = int(args[0])
+    else:
+        rhyme_strength = DEFAULT_RHYME_STRENGTH
+
     # Read our book
     f = open('paradise_lost.txt')
     text = ''.join(f.readlines())
@@ -49,7 +61,8 @@ if __name__ == '__main__':
     sentences = tokenizer.tokenize(text)
 
     # Create a corresponding list of rhyme sounds
-    rhyme_sounds = list(map(get_rhyme_sound, sentences))
+    rhyme_sound_with_strength = partial(get_rhyme_sound, rhyme_strength)
+    rhyme_sounds = list(map(rhyme_sound_with_strength, sentences))
 
     couplets = []
 
