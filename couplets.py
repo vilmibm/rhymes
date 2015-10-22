@@ -1,4 +1,5 @@
 from functools import partial
+from random import shuffle
 import sys
 
 import nltk
@@ -47,10 +48,10 @@ def get_rhyme_sound(strength, sentence):
 
 if __name__ == '__main__':
     args = sys.argv[1:]
-    while len(args) != 2:
+    while len(args) != 3:
         args.append(None)
 
-    filename, rhyme_strength = args
+    filename, rhyme_strength, number_of_couplets = args
     if rhyme_strength is not None:
         rhyme_strength = int(rhyme_strength)
     else:
@@ -58,6 +59,9 @@ if __name__ == '__main__':
 
     if filename is None:
         filename = 'paradise_lost.txt'
+
+    if number_of_couplets is not None:
+        number_of_couplets = int(number_of_couplets)
 
     # Read our book
     f = open(filename)
@@ -93,6 +97,10 @@ if __name__ == '__main__':
                 # but only if the rhyming word is not the same.
                 if get_last_word(sentence) != get_last_word(rhyming_sentence):
                     couplets.append([sentence, rhyming_sentence])
+
+    if number_of_couplets is not None:
+        shuffle(couplets)
+        couplets = couplets[0:number_of_couplets]
 
     for sentence, rhyming_sentence in couplets:
         print("{}\n\t{}\n".format(sentence, rhyming_sentence))
