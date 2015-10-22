@@ -20,7 +20,7 @@ def get_last_word(sentence):
 
     return last_word.lower()
 
-def rhyme_sound(sentence):
+def get_rhyme_sound(sentence):
     """Given a sentence, this function returns a string representing the rhyme
     sound of the last word of the sentence. If it can't figure out the sound,
     it returns None."""
@@ -49,7 +49,7 @@ if __name__ == '__main__':
     sentences = tokenizer.tokenize(text)
 
     # Create a corresponding list of rhyme sounds
-    rhyme_sounds = list(map(rhyme_sound, sentences))
+    rhyme_sounds = list(map(get_rhyme_sound, sentences))
 
     couplets = []
 
