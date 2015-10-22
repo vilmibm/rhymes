@@ -47,13 +47,20 @@ def get_rhyme_sound(strength, sentence):
 
 if __name__ == '__main__':
     args = sys.argv[1:]
-    if len(args) == 1:
-        rhyme_strength = int(args[0])
+    while len(args) != 2:
+        args.append(None)
+
+    filename, rhyme_strength = args
+    if rhyme_strength is not None:
+        rhyme_strength = int(rhyme_strength)
     else:
         rhyme_strength = DEFAULT_RHYME_STRENGTH
 
+    if filename is None:
+        filename = 'paradise_lost.txt'
+
     # Read our book
-    f = open('paradise_lost.txt')
+    f = open(filename)
     text = ''.join(f.readlines())
     f.close()
 
