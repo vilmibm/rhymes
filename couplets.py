@@ -3,7 +3,6 @@ import nltk
 # Set up NLTK
 nltk.download('cmudict')
 nltk.download('punkt')
-nltk.download('cmudict')
 
 # For getting sentences out of text:
 tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
@@ -75,7 +74,5 @@ if __name__ == '__main__':
                 if get_last_word(sentence) != get_last_word(rhyming_sentence):
                     couplets.append([sentence, rhyming_sentence])
 
-                for couplet in couplets:
-                    print(couplet[0])
-                    print("\t", couplet[1])
-                    print('')
+    for sentence, rhyming_sentence in couplets:
+        print("{}\n\t{}\n".format(sentence, rhyming_sentence))
